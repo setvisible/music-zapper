@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PlayerWidget</class>
+ <widget class="QWidget" name="PlayerWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>406</width>
+    <height>104</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
+     <item>
+      <widget class="QLabel" name="coverLabel">
+       <property name="text">
+        <string>Cover</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="ProgressWidget" name="progressWidget" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>15</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="statusLabel">
+       <property name="text">
+        <string>Status</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="controlLayout" stretch="1,0">
+       <item>
+        <widget class="PlayerControls" name="controls" native="true"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="fullScreenButton">
+         <property name="text">
+          <string>Fullscreen</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlayerControls</class>
+   <extends>QWidget</extends>
+   <header>GUI/PlayerControls</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ProgressWidget</class>
+   <extends>QWidget</extends>
+   <header>Widgets/ProgressWidget</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

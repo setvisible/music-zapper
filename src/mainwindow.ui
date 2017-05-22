@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>376</width>
+    <height>328</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="Selector" name="selector" native="true"/>
+    </item>
+    <item>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="page">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QSplitter" name="splitter">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="QWidget" name="verticalLayoutWidget">
+           <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1,1">
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Playlist&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="propertiesBox">
+              <property name="title">
+               <string>Properties</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="VideoWidget" name="videoThumbWidget" native="true"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="verticalLayoutWidget_2">
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="PlaylistView" name="playlistView" native="true"/>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_2">
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="VideoWidget" name="videoWidget" native="true"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="PlayerWidget" name="player" native="true"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>376</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <widget class="QMenu" name="menu_Recent_Files">
+     <property name="title">
+      <string>&amp;Recent Files</string>
+     </property>
+     <addaction name="separator"/>
+     <addaction name="action_ClearRecentList"/>
+    </widget>
+    <addaction name="action_New"/>
+    <addaction name="action_Open"/>
+    <addaction name="action_Save"/>
+    <addaction name="action_SaveAs"/>
+    <addaction name="separator"/>
+    <addaction name="action_AddMedias"/>
+    <addaction name="separator"/>
+    <addaction name="menu_Recent_Files"/>
+    <addaction name="separator"/>
+    <addaction name="action_Exit"/>
+   </widget>
+   <widget class="QMenu" name="menu_Help">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="action_Tutorial"/>
+    <addaction name="separator"/>
+    <addaction name="action_About"/>
+    <addaction name="action_AboutQt"/>
+   </widget>
+   <widget class="QMenu" name="menu_View">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <addaction name="action_Minimal"/>
+    <addaction name="action_Normal"/>
+    <addaction name="action_Full"/>
+    <addaction name="separator"/>
+    <addaction name="action_ShowPlaylist"/>
+    <addaction name="separator"/>
+    <addaction name="action_Fullscreen"/>
+    <addaction name="action_AlwaysVisible"/>
+    <addaction name="separator"/>
+    <addaction name="action_Preferences"/>
+   </widget>
+   <widget class="QMenu" name="menu_Play">
+    <property name="title">
+     <string>&amp;Play</string>
+    </property>
+    <addaction name="action_Play"/>
+    <addaction name="action_Pause"/>
+    <addaction name="action_Stop"/>
+   </widget>
+   <widget class="QMenu" name="menu_Navigation">
+    <property name="title">
+     <string>&amp;Navigation</string>
+    </property>
+    <addaction name="action_Next"/>
+    <addaction name="action_Previous"/>
+   </widget>
+   <addaction name="menu_File"/>
+   <addaction name="menu_View"/>
+   <addaction name="menu_Play"/>
+   <addaction name="menu_Navigation"/>
+   <addaction name="menu_Help"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="styleSheet">
+    <string notr="true">QStatusBar {
+    background-color: rgb(80, 80, 80);
+	color: rgb(255, 255, 255);
+}</string>
+   </property>
+  </widget>
+  <action name="action_Open">
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+   <property name="toolTip">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="action_Exit">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+  </action>
+  <action name="action_Preferences">
+   <property name="text">
+    <string>&amp;Preferences...</string>
+   </property>
+  </action>
+  <action name="action_AlwaysVisible">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Always Visible</string>
+   </property>
+  </action>
+  <action name="action_Play">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/yarock/media-play.png</normaloff>:/icons/yarock/media-play.png</iconset>
+   </property>
+   <property name="text">
+    <string>Play</string>
+   </property>
+   <property name="toolTip">
+    <string>Play</string>
+   </property>
+  </action>
+  <action name="action_Stop">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/yarock/media-stop.png</normaloff>:/icons/yarock/media-stop.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stop</string>
+   </property>
+  </action>
+  <action name="action_Next">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/yarock/media-next.png</normaloff>:/icons/yarock/media-next.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Next</string>
+   </property>
+  </action>
+  <action name="action_Previous">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/yarock/media-prev.png</normaloff>:/icons/yarock/media-prev.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Previous</string>
+   </property>
+  </action>
+  <action name="action_AboutQt">
+   <property name="text">
+    <string>About Qt...</string>
+   </property>
+  </action>
+  <action name="action_About">
+   <property name="text">
+    <string>About MusicZapper...</string>
+   </property>
+  </action>
+  <action name="action_ClearRecentList">
+   <property name="text">
+    <string>Clear the Recent List</string>
+   </property>
+  </action>
+  <action name="action_Minimal">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/yarock/screen-minimalmode.png</normaloff>:/icons/yarock/screen-minimalmode.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Minimal</string>
+   </property>
+  </action>
+  <action name="action_Normal">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/yarock/screen-normalmode.png</normaloff>:/icons/yarock/screen-normalmode.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Normal</string>
+   </property>
+  </action>
+  <action name="action_Full">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/yarock/screen-fullmode.png</normaloff>:/icons/yarock/screen-fullmode.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Full</string>
+   </property>
+  </action>
+  <action name="action_New">
+   <property name="text">
+    <string>&amp;New</string>
+   </property>
+  </action>
+  <action name="action_Save">
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="action_SaveAs">
+   <property name="text">
+    <string>Save &amp;As...</string>
+   </property>
+   <property name="toolTip">
+    <string>Save As</string>
+   </property>
+  </action>
+  <action name="action_AddMedias">
+   <property name="text">
+    <string>&amp;Add Medias...</string>
+   </property>
+   <property name="toolTip">
+    <string>Add Medias</string>
+   </property>
+  </action>
+  <action name="action_Fullscreen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Fullscreen</string>
+   </property>
+  </action>
+  <action name="action_Pause">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/yarock/media-pause.png</normaloff>:/icons/yarock/media-pause.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pause</string>
+   </property>
+  </action>
+  <action name="action_Tutorial">
+   <property name="text">
+    <string>Tutorial...</string>
+   </property>
+  </action>
+  <action name="action_ShowPlaylist">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/commute_16x16.png</normaloff>:/icons/commute_16x16.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Playlist</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>VideoWidget</class>
+   <extends>QWidget</extends>
+   <header>GUI/VideoWidget</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Selector</class>
+   <extends>QWidget</extends>
+   <header>GUI/Selector</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PlayerWidget</class>
+   <extends>QWidget</extends>
+   <header>GUI/PlayerWidget</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PlaylistView</class>
+   <extends>QWidget</extends>
+   <header>GUI/PlaylistView</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

@@ -1,0 +1,29 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/logo/Movies.ico</file>
+        <file>icons/logo/Movies_128x128.png</file>
+        <file>icons/qtbase/media-seek-backward-32.png</file>
+        <file>icons/qtbase/media-seek-forward-32.png</file>
+        <file>icons/yarock/media-next.png</file>
+        <file>icons/yarock/media-pause.png</file>
+        <file>icons/yarock/media-play.png</file>
+        <file>icons/yarock/media-prev.png</file>
+        <file>icons/yarock/media-stop.png</file>
+        <file>icons/yarock/screen-fullmode.png</file>
+        <file>icons/yarock/screen-minimalmode.png</file>
+        <file>icons/yarock/screen-normalmode.png</file>
+        <file>icons/button_keep_128x128.png</file>
+        <file>icons/button_move_128x128.png</file>
+        <file>icons/button_zap_128x128.png</file>
+        <file>icons/commute_16x16.png</file>
+        <file>icons/mute_off_20x20.png</file>
+        <file>icons/mute_on_20x20.png</file>
+        <file>icons/progress_cursor_13x15.png</file>
+        <file>icons/video_thumb_176x43.png</file>
+        <file>icons/video_thumb_48x48.png</file>
+        <file>icons/volume_background_18x49.png</file>
+        <file>icons/volume_cursor_10x18.png</file>
+        <file>icons/redo_32x32.png</file>
+        <file>icons/undo_32x32.png</file>
+    </qresource>
+</RCC>
