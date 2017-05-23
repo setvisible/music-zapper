@@ -30,6 +30,7 @@
 #include <Core/PlaylistModel>
 
 #include <QtGui/QClipboard>
+#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMenu>
 
 
@@ -38,12 +39,23 @@ PlaylistView::PlaylistView(QWidget *parent) : QWidget(parent)
   , m_player(Q_NULLPTR)
 {
     ui->setupUi(this);
-    ui->listView->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
 
 #ifndef QT_NO_CONTEXTMENU
-    connect(ui->listView, SIGNAL(customContextMenuRequested(QPoint)),
+    connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(onCustomContextMenuRequested(QPoint)));
 #endif
+
+    ui->undefFilterButton->setCheckable(true);
+    ui->keepFilterButton->setCheckable(true);
+    ui->zapFilterButton->setCheckable(true);
+    ui->moveFilterButton->setCheckable(true);
+
+    ui->undefFilterButton->setChecked(false);
+    ui->keepFilterButton->setChecked(false);
+    ui->zapFilterButton->setChecked(false);
+    ui->moveFilterButton->setChecked(false);
+
 }
 
 PlaylistView::~PlaylistView()
@@ -56,7 +68,7 @@ PlaylistView::~PlaylistView()
 void PlaylistView::setPlayer(Player *player)
 {
     if (m_player) {
-        disconnect(ui->listView, SIGNAL(activated(QModelIndex)), m_player, SLOT(jump(QModelIndex)));
+        disconnect(ui->tableView, SIGNAL(activated(QModelIndex)), m_player, SLOT(jump(QModelIndex)));
         disconnect(m_player->playlist(), SIGNAL(currentIndexChanged(int)),
                    this, SLOT(playlistPositionChanged(int)));
     }
@@ -64,19 +76,33 @@ void PlaylistView::setPlayer(Player *player)
     m_player = player;
 
     if (m_player) {
-        connect(ui->listView, SIGNAL(activated(QModelIndex)), m_player, SLOT(jump(QModelIndex)));
+        connect(ui->tableView, SIGNAL(activated(QModelIndex)), m_player, SLOT(jump(QModelIndex)));
         connect(m_player->playlist(), SIGNAL(currentIndexChanged(int)),
                 this, SLOT(playlistPositionChanged(int)));
 
-        ui->listView->setModel(m_player->playlist()->model());
+        ui->tableView->setModel(m_player->playlist()->model());
+
+        /* Format the table */
+        ui->tableView->setShowGrid(false);
+        ui->tableView->verticalHeader()->hide();
+        ui->tableView->horizontalHeader()->hide();
+        ui->tableView->setVerticalScrollMode(QTableView::ScrollPerPixel);
+        ui->tableView->setWordWrap(false);
+
+        ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+        // Makes the cells expand to fill the available space.
+        ui->tableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+        ui->tableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+        ui->tableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
 
         const int i = m_player->playlist()->currentIndex();
         const QModelIndex index = m_player->playlist()->model()->index(i, 0);
-        ui->listView->setCurrentIndex(index);
+        ui->tableView->setCurrentIndex(index);
     }
 
     if (!m_player->isPlayerAvailable()) {
-        ui->listView->setEnabled(false);
+        ui->tableView->setEnabled(false);
     }
 }
 
@@ -84,7 +110,7 @@ void PlaylistView::setPlayer(Player *player)
 void PlaylistView::playlistPositionChanged(int currentItem)
 {
     Q_ASSERT(m_player);
-    ui->listView->setCurrentIndex(m_player->playlist()->model()->index(currentItem, 0));
+    ui->tableView->setCurrentIndex(m_player->playlist()->model()->index(currentItem, 0));
 }
 
 /***********************************************************************************
@@ -95,7 +121,7 @@ void PlaylistView::onCustomContextMenuRequested(const QPoint &pos)
     /// \todo const bool resultsAvailable = m_filterModel->hasResults();
     /// \todo const bool enabled = !m_testRunning && resultsAvailable;
 
-    const QModelIndex clicked = ui->listView->indexAt(pos);
+    const QModelIndex clicked = ui->tableView->indexAt(pos);
     const bool enabled = clicked.isValid();
 
     QMenu menu(this);
@@ -143,7 +169,7 @@ void PlaylistView::onCustomContextMenuRequested(const QPoint &pos)
     connect(action, &QAction::triggered, this, &PlaylistView::onReorganizeRandomTriggered);
     menu.addAction(action);
 
-    menu.exec(ui->listView->mapToGlobal(pos));
+    menu.exec(ui->tableView->mapToGlobal(pos));
 }
 #endif
 
@@ -180,7 +206,7 @@ void PlaylistView::onCopyItemTriggered(const QModelIndex &index)
     ///
     /// const TestResult result = m_filterModel->testResult(index);
     ///
-    const QString result = ui->listView->model()->data(index, PlaylistModel::FullFileName).toString();
+    const QString result = ui->tableView->model()->data(index, PlaylistModel::FullFileName).toString();
     QApplication::clipboard()->setText(result);
 }
 
