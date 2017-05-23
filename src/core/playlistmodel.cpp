@@ -24,10 +24,13 @@
 
 #include "playlistmodel.h"
 
-#include <QFileInfo>
-#include <QUrl>
-#include <QMediaPlaylist>
-#include <QDir>
+#include <QtCore/QtGlobal>
+#include <QtCore/QFileInfo>
+#include <QtCore/QDir>
+#include <QtCore/QUrl>
+#include <QtGui/QBrush>
+#include <QtGui/QPixmap>
+#include <QtMultimedia/QMediaPlaylist>
 
 PlaylistModel::PlaylistModel(QObject *parent)
     : QAbstractItemModel(parent)
@@ -63,26 +66,68 @@ QModelIndex PlaylistModel::parent(const QModelIndex &child) const
 
 QVariant PlaylistModel::data(const QModelIndex &index, int role) const
 {
-    if (index.isValid() && role == Qt::DisplayRole) {
-        QVariant value = m_data[index];
-        if (!value.isValid()) {
-            if (index.column() == Column::Title) { /* Column Title */
-                QUrl location = m_playlist->media(index.row()).canonicalUrl();
-                return QFileInfo(location.path()).fileName();
+    if (!m_playlist || !index.isValid())
+        return QVariant();
 
-            } else if (index.column() == Column::Status) { /* Column Status */
-                return QLatin1String("Undefined");
+    if (role == Qt::DisplayRole) {
+        //QVariant value = m_data[index];
+        //if (!value.isValid()) {
 
-            } else if (index.column() == Column::Length) { /* Column Length */
-                return QLatin1String("5:38");
+        if (index.column() == Column::Status) { /* Column Status */
+            return QLatin1String("[?]");
+
+        } else if (index.column() == Column::Title) { /* Column Title */
+            QUrl location = m_playlist->media(index.row()).canonicalUrl();
+            return QFileInfo(location.path()).fileName();
+
+        } else if (index.column() == Column::Length) { /* Column Length */
+            return QLatin1String("5:38");
+
+        } else {
+            Q_UNREACHABLE();
+        }
+        //}
+        //return value;
+
+    } else if (role == Qt::DecorationRole) {
+
+        if (index.column() == Column::Status) {
+
+            Media::Status s = m_playlist->mediaStatus(index.row());
+            switch (s) {
+            case Media::Undefined:
+                return QPixmap(QLatin1String(":/icons/mini_undef_20x20.png"));
+                break;
+            case Media::Keep:
+                return QPixmap(QLatin1String(":/icons/mini_keep_20x20.png"));
+                break;
+            case Media::Zap:
+                return QPixmap(QLatin1String(":/icons/mini_zap_20x20.png"));
+                break;
+            case Media::Move:
+                return QPixmap(QLatin1String(":/icons/mini_move_20x20.png"));
+                break;
+            default:
+                Q_UNREACHABLE();
+                break;
+            }
+
+        }
+
+    } else if (role == Qt::ForegroundRole) {
+        if (index.column() == Column::Title) {
+            bool error = m_playlist->hasMediaError(index.row());
+            if (error) {
+                return QBrush(Qt::red);
             }
         }
-        return value;
+        return QBrush(Qt::black);
 
-    } else if (index.isValid() && role == UserData::FullFileName) {
+    } else if (role == UserData::FullFileName) {
         QUrl location = m_playlist->media(index.row()).canonicalUrl();
         return QDir::toNativeSeparators( location.toLocalFile() );
     }
+
     return QVariant();
 }
 
@@ -112,6 +157,8 @@ void PlaylistModel::setPlaylist(Playlist *playlist)
         connect(m_playlist, SIGNAL(mediaAboutToBeRemoved(int,int)), this, SLOT(beginRemoveItems(int,int)));
         connect(m_playlist, SIGNAL(mediaRemoved(int,int)), this, SLOT(endRemoveItems()));
         connect(m_playlist, SIGNAL(mediaChanged(int,int)), this, SLOT(changeItems(int,int)));
+
+        connect(m_playlist, SIGNAL(loadFailed()), this, SLOT(onLoadFailed()));
     }
 
     endResetModel();
@@ -151,4 +198,15 @@ void PlaylistModel::changeItems(int start, int end)
 {
     m_data.clear();
     emit dataChanged(index(start,0), index(end, Column::ColumnCount));
+}
+
+void PlaylistModel::onLoadFailed()
+{
+    qDebug() << Q_FUNC_INFO;
+
+}
+
+void PlaylistModel::forceUpdate()
+{
+    emit dataChanged(index(0,0), index(m_playlist->mediaCount(), Column::ColumnCount));
 }

@@ -46,6 +46,10 @@ public:
 
     PlaylistModel *model() const;
 
+    void setMediaError(const int index, Media::Error error);
+    bool hasMediaError(const int index) const;
+
+    Media::Status mediaStatus(const int index) const;
 
 private Q_SLOTS:
     void onMediaInserted(int start, int end);

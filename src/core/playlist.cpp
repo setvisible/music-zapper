@@ -59,6 +59,40 @@ PlaylistModel *Playlist::model() const
 
 /***********************************************************************************
  ***********************************************************************************/
+void Playlist::setMediaError(const int index, Media::Error error)
+{
+    Q_ASSERT(index >= 0);
+    Q_ASSERT(index <= mediaCount());
+
+    /// \todo Should use m_playlistModel->setData(...) instead.
+    ///
+    /// Maybe:
+    /// m_playlistModel->setData(
+    ///       m_playlistModel->index(index, 0),
+    ///       QBrush(Qt::red), Qt::ForegroundRole);
+    ///
+    m_medias[index].error = error;
+    m_playlistModel->forceUpdate(); //weird...
+}
+
+bool Playlist::hasMediaError(const int index) const
+{
+    Q_ASSERT(index >= 0);
+    Q_ASSERT(index <= mediaCount());
+    return m_medias[index].error != Media::NoError;
+}
+
+
+Media::Status Playlist::mediaStatus(const int index) const
+{
+    Q_ASSERT(index >= 0);
+    Q_ASSERT(index <= mediaCount());
+    return m_medias[index].status;
+}
+
+
+/***********************************************************************************
+ ***********************************************************************************/
 void Playlist::onMediaInserted(int start, int end)
 {
     Q_ASSERT(start >= 0);

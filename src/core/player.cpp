@@ -47,7 +47,7 @@ Player::Player(QObject *parent) : QObject(parent)
 
 
     connect(m_player, SIGNAL(mediaChanged(QMediaContent)), SIGNAL(mediaChanged(QMediaContent)));
-    connect(m_player, SIGNAL(currentMediaChanged(QMediaContent)), SIGNAL(currentMediaChanged(QMediaContent)));
+    connect(m_player, SIGNAL(currentMediaChanged(QMediaContent)), this, SLOT(onCurrentMediaChanged(QMediaContent)));
 
     connect(m_player, SIGNAL(stateChanged(QMediaPlayer::State)),
             SIGNAL(stateChanged(QMediaPlayer::State)));
@@ -64,8 +64,7 @@ Player::Player(QObject *parent) : QObject(parent)
 
     connect(m_player, SIGNAL(bufferStatusChanged(int)), SIGNAL(bufferStatusChanged(int)));
 
-    connect(m_player, SIGNAL(error(QMediaPlayer::Error)), SIGNAL(error(QMediaPlayer::Error)));
-
+    connect(m_player, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(onError(QMediaPlayer::Error)));
 
     connect(m_playlist, SIGNAL(mediaInserted(int,int)), this, SLOT(onMediaChanged(int,int)));
     connect(m_playlist, SIGNAL(mediaRemoved(int,int)), this, SLOT(onMediaChanged(int,int)));
@@ -284,5 +283,37 @@ void Player::jump(const QModelIndex &index)
  ***********************************************************************************/
 void Player::onMediaChanged(int /*start*/, int /*end*/)
 {
+    /* It simplifies the signal signature  */
+    /* by removing the useless arguments.  */
     emit mediaChanged();
+}
+
+/***********************************************************************************
+ ***********************************************************************************/
+static inline Media::Error toMediaError(QMediaPlayer::Error e)
+{
+    switch (e) {
+    case QMediaPlayer::NoError:              return Media::NoError; break;
+    case QMediaPlayer::ResourceError:        return Media::ResourceError; break;
+    case QMediaPlayer::FormatError:          return Media::FormatError; break;
+    case QMediaPlayer::NetworkError:         return Media::NetworkError; break;
+    case QMediaPlayer::AccessDeniedError:    return Media::AccessDeniedError; break;
+    case QMediaPlayer::ServiceMissingError:  return Media::ServiceMissingError; break;
+    default:
+        Q_UNREACHABLE();
+        break;
+    }
+    return Media::NoError;
+}
+
+void Player::onCurrentMediaChanged(const QMediaContent &media)
+{
+    m_playlist->setMediaError(m_playlist->currentIndex(), Media::NoError);
+    emit currentMediaChanged(media);
+}
+
+void Player::onError(QMediaPlayer::Error e)
+{
+    m_playlist->setMediaError(m_playlist->currentIndex(), toMediaError(e));
+    emit error(e);
 }

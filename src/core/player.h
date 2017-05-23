@@ -122,11 +122,12 @@ Q_SIGNALS:
 
     void error(QMediaPlayer::Error error);
 
-
     void mediaChanged();
 
 private Q_SLOTS:
     void onMediaChanged(int start, int end);
+    void onCurrentMediaChanged(const QMediaContent &media);
+    void onError(QMediaPlayer::Error e);
 
 private:
     QMediaPlayer *m_player;

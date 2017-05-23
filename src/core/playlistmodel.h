@@ -34,10 +34,10 @@ class PlaylistModel : public QAbstractItemModel
     Q_OBJECT
 
     enum Column {
-        Title = 0,
-        Status,
-        Length,
-        ColumnCount
+        Status = 0,     ///< Keep, Zap or Move.
+        Title,          ///< Title of the track.
+        Length,         ///< Track's length in hh:mm:ss.
+        ColumnCount     ///< \internal Do not remove. Indicates the last column.
     };
 
 public:
@@ -62,12 +62,15 @@ public:
 
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::DisplayRole);
 
+    void forceUpdate(); // weird..
+
 private Q_SLOTS:
     void beginInsertItems(int start, int end);
     void endInsertItems();
     void beginRemoveItems(int start, int end);
     void endRemoveItems();
     void changeItems(int start, int end);
+    void onLoadFailed();
 
 private:
     Playlist *m_playlist;

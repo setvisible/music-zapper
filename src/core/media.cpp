@@ -35,6 +35,7 @@ static char STR_MOVE[]      = "move";
 Media::Media()
     : fullfilename(QString())
     , status(Status::Undefined)
+    , error(NoError)
 {
 
 }
@@ -42,6 +43,7 @@ Media::Media()
 Media::Media(const QString  &_fullfilename, const Status _status)
     : fullfilename(_fullfilename)
     , status(_status)
+    , error(NoError)
 {
 
 }

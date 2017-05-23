@@ -34,6 +34,16 @@ class Media
 public:
     enum Status { Undefined = 1, Keep, Zap, Move };
 
+    enum Error {    // inspired by QMediaPlayer::Error
+        NoError,
+        ResourceError,
+        FormatError,
+        NetworkError,
+        AccessDeniedError,
+        ServiceMissingError,
+        MediaIsPlaylist
+    };
+
     explicit Media();
     explicit Media(const QString  &_fullfilename,
                    const Status _status = Undefined);
@@ -47,6 +57,7 @@ public:
 
     QString fullfilename;
     Status status;
+    Error error;
 
     static Status stringToStatus(const QString &value);
     static QString statusToString(Status value);
