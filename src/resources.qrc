@@ -25,5 +25,9 @@
         <file>icons/volume_cursor_10x18.png</file>
         <file>icons/redo_32x32.png</file>
         <file>icons/undo_32x32.png</file>
+        <file>icons/mini_keep_20x20.png</file>
+        <file>icons/mini_move_20x20.png</file>
+        <file>icons/mini_zap_20x20.png</file>
+        <file>icons/mini_undef_20x20.png</file>
     </qresource>
 </RCC>
