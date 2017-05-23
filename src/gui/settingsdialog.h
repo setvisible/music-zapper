@@ -25,7 +25,7 @@
 #ifndef SETTINGS_DIALOG_H
 #define SETTINGS_DIALOG_H
 
-#include <QDialog>
+#include <QtWidgets/QDialog>
 
 class QAbstractButton;
 

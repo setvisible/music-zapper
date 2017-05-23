@@ -25,7 +25,7 @@
 #ifndef SELECTOR_WIDGET_H
 #define SELECTOR_WIDGET_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 namespace Ui {
 class Selector;

@@ -26,6 +26,7 @@
 #define PLAYLIST_VIEW_H
 
 #include <QtWidgets/QWidget>
+#include <QtMultimedia/QMediaPlayer>
 
 namespace Ui {
 class PlaylistView;

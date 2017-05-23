@@ -27,7 +27,7 @@
 
 #include "zappersettings.h"
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class Player;
 
