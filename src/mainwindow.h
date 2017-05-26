@@ -47,12 +47,14 @@ public:
     bool savePlaylistFile(const QString &path);
     bool loadPlaylistFile(const QString &path);
 
+    bool isAlwaysOnTop() const;
+
 protected:
     void closeEvent(QCloseEvent *event);
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
     void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
     void dragLeaveEvent(QDragLeaveEvent *event) Q_DECL_OVERRIDE;
-    void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;    
+    void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
 #ifndef QT_NO_WHEELEVENT
     void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
 #endif
@@ -70,8 +72,9 @@ private Q_SLOTS:
     void viewNormal();
     void viewFull();
     void commute();
-    void fullscreen();
-    void alwaysVisible();
+
+    void setFullScreen(bool enabled);
+    void setAlwaysOnTop(bool enabled);
 
     void showPreferences();
     void showTutorial();
@@ -104,6 +107,9 @@ private:
     inline QString niceFileName() const;
     inline bool isExampleFile() const;
     inline bool isPhysicalFile() const;
+
+    void readSettings();
+    void writeSettings();
 
     void createActions();
     void createMenus();

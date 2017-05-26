@@ -169,7 +169,7 @@
     <addaction name="action_ShowPlaylist"/>
     <addaction name="separator"/>
     <addaction name="action_Fullscreen"/>
-    <addaction name="action_AlwaysVisible"/>
+    <addaction name="action_AlwaysOnTop"/>
     <addaction name="separator"/>
     <addaction name="action_Preferences"/>
    </widget>
@@ -220,12 +220,15 @@
     <string>&amp;Preferences...</string>
    </property>
   </action>
-  <action name="action_AlwaysVisible">
+  <action name="action_AlwaysOnTop">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Always Visible</string>
+    <string>Always on Top</string>
+   </property>
+   <property name="toolTip">
+    <string>Always on Top</string>
    </property>
   </action>
   <action name="action_Play">

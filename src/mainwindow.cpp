@@ -41,12 +41,16 @@
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
 #include <QtCore/QMimeData>
+#include <QtCore/QSettings>
 #include <QtCore/QUrl>
 #include <QtGui/QCloseEvent>
 #include <QtGui/QDesktopServices>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
 
+#ifdef Q_OS_WIN
+#  include <windows.h>  /* setWindowAlwaysOnTop() */
+#endif
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
   , ui(new Ui::MainWindow)
@@ -87,6 +91,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // todo
     ui->action_ClearRecentList->setEnabled(false);
+
+    readSettings();
 }
 
 MainWindow::~MainWindow()
@@ -100,6 +106,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (maybeSave()) {
         m_zapper->writeSettings();
+        writeSettings();
         event->accept();
     } else {
         event->ignore();
@@ -283,24 +290,82 @@ void MainWindow::viewFull()
     this->adjustSize();
 }
 
-void MainWindow::fullscreen()
+/***********************************************************************************
+ ***********************************************************************************/
+void MainWindow::setFullScreen(bool enabled)
 {
-    /// \todo implement
+    QWidget *sender = qobject_cast<QWidget *>(this->sender());
+    if (sender != (QWidget *)ui->action_Fullscreen) {
+        ui->action_Fullscreen->setChecked(enabled);
+    }
+
+    if (enabled == isFullScreen())
+        return;
+
+    if (enabled) {
+        this->showFullScreen();
+    } else {
+        this->showNormal();
+    }
 }
 
-void MainWindow::alwaysVisible()
+void MainWindow::setAlwaysOnTop(bool enabled)
 {
-    /// \todo implement
+    QWidget *sender = qobject_cast<QWidget *>(this->sender());
+    if (sender != (QWidget *)ui->action_AlwaysOnTop) {
+        ui->action_AlwaysOnTop->setChecked(enabled);
+    }
+
+    if (enabled == isAlwaysOnTop())
+        return;
+
+    // The following code avoids the flickering of the window.
+    // Reference:
+    // http://www.qtforum.org/article/37819/ms-windows-qwidget-toggle-stay-on-top-always-on-top.html
+
+#ifdef Q_OS_WIN
+    if (enabled) {
+        //To make Always on Top use:
+        SetWindowPos((HWND)this->winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+    } else {
+        //to turn it off you can use:
+        SetWindowPos((HWND)this->winId(), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+    }
+#else
+    Qt::WindowFlags flags = this->windowFlags();
+    if (enabled) {
+        this->setWindowFlags(flags | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
+        this->show();
+    } else {
+        this->setWindowFlags(flags ^ (Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint));
+        this->show();
+    }
+#endif
+}
+
+bool MainWindow::isAlwaysOnTop() const
+{
+#ifdef Q_OS_WIN
+    DWORD dwExStyle = GetWindowLong((HWND)this->winId(), GWL_EXSTYLE);
+    return (bool)((dwExStyle & WS_EX_TOPMOST) != 0);
+#else
+    return (bool)(this->windowFlags() & Qt::WindowStaysOnTopHint);
+#endif
 }
 
 /***********************************************************************************
  ***********************************************************************************/
 void MainWindow::showPreferences()
 {
+    bool ontop = isAlwaysOnTop();
+    this->setAlwaysOnTop(false);
+
     SettingsDialog dialog(this);
     dialog.exec();
     m_zapper->readSettings();
     autoload();
+
+    this->setAlwaysOnTop(ontop);
 }
 
 void MainWindow::showTutorial()
@@ -469,6 +534,42 @@ QString MainWindow::askOpenFileName(const QString &fileFilter, const QString &ti
 }
 
 
+/***********************************************************************************
+ ***********************************************************************************/
+void MainWindow::readSettings()
+{
+    QSettings settings;
+    if ( !isMaximized() ) {
+        this->move(settings.value("Position", QPoint(100, 100)).toPoint());
+        this->resize(settings.value("Size", QSize(350, 350)).toSize());
+    }
+    this->setWindowState( (Qt::WindowStates)settings.value("WindowState", 0).toInt() );
+    this->setAlwaysOnTop( settings.value("AlwaysOnTop", false).toBool() );
+
+    ui->action_Fullscreen->setChecked(isFullScreen());
+    ui->action_AlwaysOnTop->setChecked(isAlwaysOnTop());
+}
+
+void MainWindow::writeSettings()
+{
+    QSettings settings;
+
+    if( !(isMaximized() | isFullScreen()) ) {
+        settings.setValue("Position", this->pos());
+        settings.setValue("Size", this->size());
+    }
+    settings.setValue("WindowState", (int)this->windowState()); // minimized, maximized, active, fullscreen...
+    settings.setValue("AlwaysOnTop", this->isAlwaysOnTop() );
+
+
+
+    // --------------------------------------------------------------
+    // Write also the current version of application in the settings,
+    // because it might be used by 3rd-party update manager softwares like
+    // FileHippo or Google Updater (aka gup).
+    // --------------------------------------------------------------
+    settings.setValue("Version", STR_APPLICATION_VERSION );
+}
 
 /***********************************************************************************
  ***********************************************************************************/
@@ -517,10 +618,10 @@ void MainWindow::createActions()
     connect(ui->action_ShowPlaylist, SIGNAL(triggered()), this, SLOT(commute()));
 
     ui->action_Fullscreen->setStatusTip(tr("Fullscreen"));
-    connect(ui->action_Fullscreen, SIGNAL(triggered()), this, SLOT(fullscreen()));
+    connect(ui->action_Fullscreen, SIGNAL(triggered(bool)), this, SLOT(setFullScreen(bool)));
 
-    ui->action_AlwaysVisible->setStatusTip(tr("Always Visible"));
-    connect(ui->action_AlwaysVisible, SIGNAL(triggered()), this, SLOT(alwaysVisible()));
+    ui->action_AlwaysOnTop->setStatusTip(tr("Always on Top"));
+    connect(ui->action_AlwaysOnTop, SIGNAL(triggered(bool)), this, SLOT(setAlwaysOnTop(bool)));
 
 #ifdef Q_OS_WIN
     ui->action_Preferences->setShortcut(QKeySequence(/*Qt::CTRL +*/ Qt::Key_F10));
