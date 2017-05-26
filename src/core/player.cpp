@@ -31,8 +31,14 @@
 #include <QtCore/QUrl>
 #include <QtCore/QFileInfo>
 #include <QtCore/QModelIndex>
+#include <QtCore/QSettings>
 #include <QtMultimedia/QMediaPlayer>
 #include <QtMultimedia/QMediaPlaylist>
+
+
+static char STR_SETTING_VOLUME[]     = "volume";
+static char STR_SETTING_IS_MUTED[]   = "isMuted";
+
 
 Player::Player(QObject *parent) : QObject(parent)
   , m_player(new QMediaPlayer(this))
@@ -70,11 +76,20 @@ Player::Player(QObject *parent) : QObject(parent)
     connect(m_playlist, SIGNAL(mediaRemoved(int,int)), this, SLOT(onMediaChanged(int,int)));
     connect(m_playlist, SIGNAL(mediaChanged(int,int)), this, SLOT(onMediaChanged(int,int)));
 
+
+
+    QSettings settings;
+    m_player->setVolume(settings.value(STR_SETTING_VOLUME, 50).toInt());
+    m_player->setMuted(settings.value(STR_SETTING_IS_MUTED, false).toBool());
 }
 
 Player::~Player()
 {
-
+    if(m_player) {
+        QSettings settings;
+        settings.setValue(STR_SETTING_VOLUME, m_player->volume());
+        settings.setValue(STR_SETTING_IS_MUTED, m_player->isMuted());
+    }
 }
 
 void Player::clear()
