@@ -1,4 +1,4 @@
-# MusicZapper
+# MusicZapper v0.1
 
 **MusicZapper** is a **classic music player**, that offers the opportunity to **zap the music files** whenever you want.
 
@@ -71,7 +71,14 @@ No specific action.
 
 #### Windows
 
-To deploy the application on Windows, we must make sure that the relevant DLLs and the executable are in the same directory.
+To deploy the application on Windows, you MUST be sure that the relevant libraries (*.dll) and the executable are in the final directory.
+
+Indeed, **MusicZapper** depends on 3rd-party multimedia libraries provided with the Qt5 framework.
+
+These libraries MUST be deployed with the binary, otherwise there's a certain risk that the app doesn't read correctly some media formats.
+
+
+To do it:
 
 1. Go to the `Release` build directory.
 
