@@ -36,9 +36,9 @@
 #include <QtCore/QDebug>
 #include <QtCore/QFileInfo>
 
-void MoveToTrashImpl(const QString &file)
+void MoveToTrashImpl(const QString &filename)
 {
-    QFileInfo fileinfo( file );
+    QFileInfo fileinfo( filename );
 
     if (!fileinfo.exists()) {
         qDebug() << "File doesnt exists, cant move to trash";

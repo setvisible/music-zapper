@@ -27,7 +27,7 @@
 
 #include <QtCore/QString>
 
-void MoveToTrashImpl(const QString &file);
+void MoveToTrashImpl(const QString &filename);
 
 
 #endif // MOVE_TO_TRASH_H

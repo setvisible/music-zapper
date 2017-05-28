@@ -33,15 +33,19 @@
 
 #ifdef Q_OS_LINUX
 
+#include <QtCore/QDateTime>
 #include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
 #include <QtCore/QFileInfo>
+#include <QtCore/QStandardPaths>
 
 bool TrashInitialized = false;
 QString TrashPath;
 QString TrashPathInfo;
 QString TrashPathFiles;
 
-void MoveToTrashImpl(const QString &file)
+void MoveToTrashImpl(const QString &filename)
 {
 #ifdef QT_GUI_LIB
     if( !TrashInitialized ){
@@ -63,26 +67,39 @@ void MoveToTrashImpl(const QString &file)
                 }
             }
         }
-        if( TrashPath.isEmpty() )
-            throw Exception( "Cant detect trash folder" );
+        if( TrashPath.isEmpty() ) {
+            qDebug() << "Cant detect trash folder" ;
+            /// \todo Implement a exception ?
+            /// throw MuzicZapper::Core::Exception( "Cant detect trash folder" );
+        }
         TrashPathInfo = TrashPath + "/info";
         TrashPathFiles = TrashPath + "/files";
-        if( !QDir( TrashPathInfo ).exists() || !QDir( TrashPathFiles ).exists() )
-            throw Exception( "Trash doesnt looks like FreeDesktop.org Trash specification" );
+        if( !QDir( TrashPathInfo ).exists() || !QDir( TrashPathFiles ).exists() ) {
+            qDebug() << "Trash doesnt looks like FreeDesktop.org Trash specification" ;
+            /// \todo Implement a exception ?
+            /// throw MuzicZapper::Core::Exception( "Trash doesnt looks like FreeDesktop.org Trash specification" );
+        }
         TrashInitialized = true;
     }
-    QFileInfo original( file );
-    if( !original.exists() )
-        throw Exception( "File doesnt exists, cant move to trash" );
+
+    QFileInfo original( filename );
+    if( !original.exists() ) {
+        qDebug() << "File doesnt exists, cant move to trash" ;
+        /// \todo Implement a exception ?
+        /// throw MuzicZapper::Core::Exception( "File doesnt exists, cant move to trash" );
+    }
+
     QString info;
     info += "[Trash Info]\nPath=";
     info += original.absoluteFilePath();
     info += "\nDeletionDate=";
     info += QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm:ss.zzzZ");
     info += "\n";
+
     QString trashname = original.fileName();
     QString infopath = TrashPathInfo + "/" + trashname + ".trashinfo";
     QString filepath = TrashPathFiles + "/" + trashname;
+
     int nr = 1;
     while( QFileInfo( infopath ).exists() || QFileInfo( filepath ).exists() ){
         nr++;
@@ -93,15 +110,27 @@ void MoveToTrashImpl(const QString &file)
         infopath = TrashPathInfo + "/" + trashname + ".trashinfo";
         filepath = TrashPathFiles + "/" + trashname;
     }
+
     QDir dir;
     if( !dir.rename( original.absoluteFilePath(), filepath ) ){
-        throw Exception( "move to trash failed" );
+        qDebug() << "move to trash failed" ;
+        /// \todo Implement a exception ?
+        /// throw MuzicZapper::Core::Exception( "move to trash failed" );
     }
-    File infofile;
-    infofile.createUtf8( infopath, info );
+
+    /* Write the .trashinfo file */
+    QFile file(infopath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        return;
+
+    QTextStream out(&file);
+    out << info << "\n";
+
 #else
-    Q_UNUSED( file );
-    throw Exception( "Trash in server-mode not supported" );
+    Q_UNUSED( filename );
+    qDebug() << "Trash in server-mode not supported" ;
+    /// \todo Implement a exception ?
+    /// throw MuzicZapper::Core::Exception( "Trash in server-mode not supported" );
 #endif
 }
 #endif
