@@ -13,6 +13,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG  += no_keyword
 
+# QT += c++11
+QMAKE_CXXFLAGS += -std=c++11
+
 lessThan(QT_VERSION, 5.0) {
     warning("prefere to build it with Qt 5.0")
 }

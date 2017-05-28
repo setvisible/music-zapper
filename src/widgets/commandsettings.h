@@ -27,7 +27,7 @@
 
 #include <QtCore/QString>
 
-enum class Command {
+enum Command {
     NoAction        = 0,
     MoveToPath      = 1,
     MoveToSystemBin = 2
@@ -36,7 +36,7 @@ enum class Command {
 struct CommandSettings
 {
     explicit CommandSettings()
-        : command(Command::NoAction)
+        : command(NoAction)
         , path(QString())
         , isImmediat(true)
         , isDetachable(true)

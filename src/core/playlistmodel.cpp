@@ -73,14 +73,14 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
         //QVariant value = m_data[index];
         //if (!value.isValid()) {
 
-        if (index.column() == Column::Status) { /* Column Status */
+        if (index.column() == Status) { /* Column Status */
             return QLatin1String("[?]");
 
-        } else if (index.column() == Column::Title) { /* Column Title */
+        } else if (index.column() == Title) { /* Column Title */
             QUrl location = m_playlist->media(index.row()).canonicalUrl();
             return QFileInfo(location.path()).fileName();
 
-        } else if (index.column() == Column::Length) { /* Column Length */
+        } else if (index.column() == Length) { /* Column Length */
             return QLatin1String("5:38");
 
         } else {
@@ -91,7 +91,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
 
     } else if (role == Qt::DecorationRole) {
 
-        if (index.column() == Column::Status) {
+        if (index.column() == Status) {
 
             Media::Status s = m_playlist->mediaStatus(index.row());
             switch (s) {
@@ -115,7 +115,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
         }
 
     } else if (role == Qt::ForegroundRole) {
-        if (index.column() == Column::Title) {
+        if (index.column() == Title) {
             bool error = m_playlist->hasMediaError(index.row());
             if (error) {
                 return QBrush(Qt::red);
@@ -123,7 +123,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
         }
         return QBrush(Qt::black);
 
-    } else if (role == UserData::FullFileName) {
+    } else if (role == FullFileName) {
         QUrl location = m_playlist->media(index.row()).canonicalUrl();
         return QDir::toNativeSeparators( location.toLocalFile() );
     }
@@ -197,7 +197,7 @@ void PlaylistModel::endRemoveItems()
 void PlaylistModel::changeItems(int start, int end)
 {
     m_data.clear();
-    emit dataChanged(index(start,0), index(end, Column::ColumnCount));
+    emit dataChanged(index(start,0), index(end, ColumnCount));
 }
 
 void PlaylistModel::onLoadFailed()
@@ -208,5 +208,5 @@ void PlaylistModel::onLoadFailed()
 
 void PlaylistModel::forceUpdate()
 {
-    emit dataChanged(index(0,0), index(m_playlist->mediaCount(), Column::ColumnCount));
+    emit dataChanged(index(0,0), index(m_playlist->mediaCount(), ColumnCount));
 }

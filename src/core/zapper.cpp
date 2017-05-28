@@ -99,7 +99,7 @@ void Zapper::processCurrentSong(CommandSettings settings)
         return;
 
     switch (settings.command) {
-    case Command::MoveToPath:
+    case MoveToPath:
     {
         const QString source = QDir::toNativeSeparators(url.toLocalFile());
         const QFileInfo fi(source);
@@ -127,7 +127,7 @@ void Zapper::processCurrentSong(CommandSettings settings)
     }
 
         break;
-    case Command::MoveToSystemBin:
+    case MoveToSystemBin:
     {
         // gtk/util.c
         // #include <gio/gio.h> /* g_file_trash () */
@@ -179,7 +179,7 @@ void Zapper::processCurrentSong(CommandSettings settings)
          */
 
         break;
-    case Command::NoAction:
+    case NoAction:
     default:
         break;
     }
