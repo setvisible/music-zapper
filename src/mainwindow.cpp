@@ -386,8 +386,13 @@ void MainWindow::showTutorial()
  ***********************************************************************************/
 void MainWindow::about()
 {
+    bool ontop = isAlwaysOnTop();
+    this->setAlwaysOnTop(false);
+
     QMessageBox msgBox(QMessageBox::NoIcon, tr("About %0").arg(STR_APPLICATION_NAME), aboutHtml());
     msgBox.exec();
+
+    this->setAlwaysOnTop(ontop);
 }
 
 /***********************************************************************************
