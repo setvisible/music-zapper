@@ -8,7 +8,10 @@ HEADERS += \
     $$PWD/progressslider.h \
     $$PWD/progresswidget.h \
     $$PWD/slider.h \
-    $$PWD/volumeslider.h
+    $$PWD/utils.h \
+    $$PWD/volumeslider.h \
+    $$PWD/waveform.h \
+    $$PWD/wavfile.h
 
 SOURCES += \
     $$PWD/commandsettings.cpp \
@@ -16,5 +19,8 @@ SOURCES += \
     $$PWD/progressslider.cpp \
     $$PWD/progresswidget.cpp \
     $$PWD/slider.cpp \
-    $$PWD/volumeslider.cpp
+    $$PWD/utils.cpp \
+    $$PWD/volumeslider.cpp \
+    $$PWD/waveform.cpp \
+    $$PWD/wavfile.cpp
 
