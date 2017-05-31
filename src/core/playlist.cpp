@@ -61,6 +61,7 @@ PlaylistModel *Playlist::model() const
  ***********************************************************************************/
 void Playlist::setMediaError(const int index, Media::Error error)
 {
+    return ; //tempo
     Q_ASSERT(index >= 0);
     Q_ASSERT(index <= mediaCount());
 
