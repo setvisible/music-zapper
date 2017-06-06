@@ -1,6 +1,6 @@
-# MusicZapper v0.1
+# MusicZapper v0.1 (beta)
 
-**MusicZapper** is a **classic music player**, that offers the opportunity to **zap the music files** whenever you want.
+**MusicZapper** is a **classic music player**, that offers the opportunity to **zap the music files** at anytime.
 
 
 ## Description
@@ -14,21 +14,21 @@ However it has 3 pushbuttons:
 - `Move`
 
 
-Each button performs a unique action on the music file currently played. The actions are fully customizable (go to `Edit` > `Preferences`).
+Each button does something on the music file currently played. The something is fully customisable (go to `Edit` > `Preferences`).
 
 __For example:__
 
-You are listening a music file (*.FLAC, *.MP3, *.OGG...), then you click on:
+Play a music file (flac, mp3, ogg...), then click on:
 
 - `Keep`: lets the music file *as is*, and plays the next music file in the playlist.
-- `Zap`: tags the file as *zapped*, or moves it to a special directory. You could listen it another day.
+- `Zap`: tags the file as *zapped*, or moves it to a special directory. It could be listened another time.
 - `Move`: moves the file to the trash bin and plays the next file.
 
 And so on.
 
-Then, little by little, **MusicZapper** organizes your music files.
+Gradually **MusicZapper** organises the music files.
 
-It's useful to save gigabytes of space.
+It might be useful to save giga of space.
 
 ## Development
 
@@ -71,7 +71,7 @@ No specific action.
 
 #### Windows
 
-To deploy the application on Windows, you MUST be sure that the relevant libraries (*.dll) and the executable are in the final directory.
+To deploy the application on Windows, be sure that the relevant libraries (dll) and the executable are in the target directory.
 
 Indeed, **MusicZapper** depends on 3rd-party multimedia libraries provided with the Qt5 framework.
 
